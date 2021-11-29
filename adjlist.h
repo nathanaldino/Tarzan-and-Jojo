@@ -1,7 +1,7 @@
 #ifndef ADJLIST_H
 #define ADJLIST_H
 
-#include<string.h>
+#include<string>
 #include<unordered_map>
 #include<list>
 #include<vector>
@@ -18,7 +18,8 @@ class Vertex {
 
         traversal status = undiscovered;
         
-    public:
+    public:  
+        Vertex() {}
         Vertex(int newid) {
             setid(newid);
         }
@@ -39,17 +40,19 @@ class Vertex {
 class AdjList {
     private:
         int numvertices;
-        std::vector<Vertex> vertices;
-        std::unordered_map<int, std::list<Vertex>> adjlist;
+        std::unordered_map<int, std::list<Vertex> > adjlist;
 
     public:
-        void addvertex(int id) {
-            Vertex newvertex(id);
-            vertices.push_back(newvertex);
+        AdjList(int vertices) {
+            numvertices = vertices;
         }
+        
+        std::list<Vertex> getneighbors(Vertex vertex) {
+            return adjlist.at(vertex.getid());
+        }
+
         void addedge(Vertex vertexA, Vertex vertexB) {
             adjlist[vertexA.getid()].push_back(vertexB);
-            vertex
         }
         
 
