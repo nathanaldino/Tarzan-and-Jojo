@@ -10,7 +10,7 @@ enum traversal {undiscovered, discovered, explored};
 
 class Vertex {
     private:
-        Vertex* parent = nullptr;
+        Vertex *parent = nullptr;
 
         int id = -1;
         int choice = -1;
@@ -27,7 +27,7 @@ class Vertex {
         int getid() {return id;}
         void setid(int newid) {id = newid;}
 
-        Vertex getparent() {return *parent;}
+        Vertex* getparent() {return parent;}
         void setparent(Vertex newparent) {*parent = newparent;}
 
         int getchoice() {return choice;}
@@ -36,6 +36,7 @@ class Vertex {
         std::string getdirection() {return direction;}
         void setdirection(std::string newdirection) {direction = newdirection;}
 
+        traversal getstatus() {return status;}
         void discover() {status = discovered;}
         void explore() {status = explored;}  
 };
@@ -54,7 +55,8 @@ class AdjList {
             return adjlist.at(vertex.getid());
         }
 
-        void addedge(Vertex vertexA, Vertex vertexB) {
+        void addedge(Vertex vertexA, Vertex vertexB, int newchoice) {
+            vertexB.setchoice(newchoice);
             adjlist[vertexA.getid()].push_back(vertexB);
         }
         
