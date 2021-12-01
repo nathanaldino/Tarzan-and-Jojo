@@ -6,7 +6,7 @@
 #include<list>
 #include<vector>
 
-enum traversal {undiscovered, dicovered, explored};
+enum traversal {undiscovered, discovered, explored};
 
 class Vertex {
     private:
@@ -14,7 +14,7 @@ class Vertex {
 
         int id = -1;
         int choice = -1;
-        std::string direction;
+        std::string direction = "X";
 
         traversal status = undiscovered;
         
@@ -34,7 +34,10 @@ class Vertex {
         void setchoice(int newchoice) {choice = newchoice;}
 
         std::string getdirection() {return direction;}
-        void setdirection(std::string newdirection) {direction = newdirection;}     
+        void setdirection(std::string newdirection) {direction = newdirection;}
+
+        void discover() {status = discovered;}
+        void explore() {status = explored;}  
 };
 
 class AdjList {
