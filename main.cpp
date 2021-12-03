@@ -76,74 +76,64 @@ int main() {
             //if north, add edges. same case as ones below
             else if(maze[i][j].getdirection().compare("N") == 0) {
                 if( (i-3)>=0 )
-                    graph.addedge(maze[i][j],maze[i-3][j],3);
+                    graph.addedge(maze[i][j],maze[i-3][j]);
                 if( (i-4)>=0 )
-                    graph.addedge(maze[i][j],maze[i-4][j],4);
+                    graph.addedge(maze[i][j],maze[i-4][j]);
             }
             //if south
             else if(maze[i][j].getdirection().compare("S") == 0) {
                 if( (i+3)<rows )
-                    graph.addedge(maze[i][j],maze[i+3][j],3);
+                    graph.addedge(maze[i][j],maze[i+3][j]);
                 if( (i+4)<rows )
-                    graph.addedge(maze[i][j],maze[i+4][j],4);
+                    graph.addedge(maze[i][j],maze[i+4][j]);
             }
             //if east
             else if(maze[i][j].getdirection().compare("E") == 0) {
                 if( (j+3)<cols)
-                    graph.addedge(maze[i][j],maze[i][j+3],3);
+                    graph.addedge(maze[i][j],maze[i][j+3]);
                 if( (j+4)<cols)
-                    graph.addedge(maze[i][j],maze[i][j+4],4);
+                    graph.addedge(maze[i][j],maze[i][j+4]);
             }
             //if west
             else if(maze[i][j].getdirection().compare("W") == 0) {
                 if( (j-3)>=0)
-                    graph.addedge(maze[i][j],maze[i][j-3],3);
+                    graph.addedge(maze[i][j],maze[i][j-3]);
                 if( (j-4)>=0)
-                    graph.addedge(maze[i][j],maze[i][j-4],4);
+                    graph.addedge(maze[i][j],maze[i][j-4]);
             }
             //if northeast
             else if(maze[i][j].getdirection().compare("NE") == 0) {
                 if( (i-3)>=0 && (j+3)<cols )
-                    graph.addedge(maze[i][j],maze[i-3][j+3],3);
+                    graph.addedge(maze[i][j],maze[i-3][j+3]);
                 if( (i-4)>=0 && (j+4)<cols )
-                    graph.addedge(maze[i][j],maze[i-4][j+4],4);
+                    graph.addedge(maze[i][j],maze[i-4][j+4]);
             }
             //if northwest
             else if(maze[i][j].getdirection().compare("NW") == 0) {
                 if( (i-3)>=0 && (j-3)>=0 )
-                    graph.addedge(maze[i][j],maze[i-3][j-3],3);
+                    graph.addedge(maze[i][j],maze[i-3][j-3]);
                 if( (i-4)>=0 && (j-4)>=0 )
-                    graph.addedge(maze[i][j],maze[i-4][j-4],4);
+                    graph.addedge(maze[i][j],maze[i-4][j-4]);
             }
             //if southeast
             else if(maze[i][j].getdirection().compare("SE") == 0) {
                 if( (i+3)<rows && (j+3)<cols )
-                    graph.addedge(maze[i][j],maze[i+3][j+3],3);
+                    graph.addedge(maze[i][j],maze[i+3][j+3]);
                 if( (i+4)<rows && (j+4)<cols )
-                    graph.addedge(maze[i][j],maze[i+4][j+4],4);
+                    graph.addedge(maze[i][j],maze[i+4][j+4]);
             }
             //if southwest
             else if(maze[i][j].getdirection().compare("SW") == 0) {
                 if( (i+3)<rows && (j-3)>=0 )
-                    graph.addedge(maze[i][j],maze[i+3][j-3],3);
+                    graph.addedge(maze[i][j],maze[i+3][j-3]);
                 if( (i+4)<rows && (j-4)>=0 )
-                    graph.addedge(maze[i][j],maze[i+4][j-4],4);
+                    graph.addedge(maze[i][j],maze[i+4][j-4]);
             }
         }
     }
-
-    //TESTING PURPOSES
-    string displaystring;
-    if(true) {
-        displaystring = graph.display();
-        cout << displaystring;
-    }
     
     //run algorithm
-    cout << "start tarzan: " << tarzanstart.getid() << endl;
     DFStarzan(tarzanstart,graph);
-    cout << endl << graph.getparentid(7) <<graph.getvertexhead(7).getid() << graph.getvertexhead(7).status <<endl;
-    cout << "dfs done" << endl;
 
     //print correct path to output
     string solution;
@@ -163,34 +153,38 @@ int main() {
 }
 
 void DFStarzan(Vertex tarzan, AdjList &graph) {
+    //discover
     graph.discover(tarzan);
-    
+    //if the vertex has neighbors
     if(graph.hasneighbors(tarzan)) {
+        //pull neighbors for tarzan
         list<Vertex> neighbors = graph.getneighbors(tarzan);
+        //iterate through and if undiscovered, set the parent of neighbor to tarzan then recur
         for(list<Vertex>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
             if(graph.vertexstatus(*neighbor) == undiscovered) {
-                //cout << graph.getvertexhead(neighbor->getid()).getid() << "-" << graph.getvertexhead(neighbor->getid()).status <<endl;
                 graph.getvertexhead(neighbor->getid()).setparent(tarzan.getid());
-                cout << neighbor->getid() << " parent is " << graph.getvertexhead(neighbor->getid()).getparent() << endl;
                 DFStarzan(*neighbor,graph);
             }
         }
     }
-    //cout << graph.getvertexhead(tarzan.getid()).getid() << "-" <<graph.getvertexhead(tarzan.getid()).status <<endl;
+    //explore vertex
     graph.explore(tarzan);
-
 }
 
 string printSolution(Vertex jojo, string &solution, AdjList &graph) {
+    //if jojo has a parent
     if(graph.getparentid(jojo.getid()) != -1) {
+        //recur for the parent
         printSolution(graph.getvertexhead(graph.getparentid(jojo.getid())),solution,graph);
+        //update the choice based on position of jojo relative to his parent
         graph.updatechoice(graph.getvertexhead(jojo.getid()));
+        //add to string
         solution += graph.getvertexhead(graph.getparentid(jojo.getid())).getdirection() + "-" + to_string(graph.getvertexhead(jojo.getid()).getchoice()) + " ";
     }
     else {
         return solution;
     }
     
-    //for unexpected errors
+    //for unexpected errors and to get rid of compiler warning
     return solution;
 }

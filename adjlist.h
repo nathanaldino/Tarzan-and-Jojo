@@ -6,24 +6,26 @@
 #include<list>
 #include<vector>
 
+//enum to represent traversal status
 enum traversal {undiscovered, discovered, explored};
 
 class Vertex {
+    //variables, traversal status is public for ease of us
     private:
         int parentid = -1;
-
         int id = -1;
         int choice = -1;
         std::string direction = "X";
-
     public:  
         traversal status = undiscovered;
         
+        //constructors
         Vertex() {}
         Vertex(int newid) {
             setid(newid);
         }
 
+        //getters and setters for variables
         int getid() {return id;}
         void setid(int newid) {id = newid;}
 
@@ -46,21 +48,28 @@ class AdjList {
         std::unordered_map<int, std::list<Vertex> > adjlist;
 
     public:
+        //set enum to discovered
         void discover(Vertex vertex) {
             adjlist[vertex.getid()].front().status = discovered;
         }
 
+        //set enum to explored
         void explore(Vertex vertex) {
             adjlist[vertex.getid()].front().status = explored;
         }
 
+        //create vertex and initialize list with vertex head
         void createVertex(Vertex vertex) {
             adjlist[vertex.getid()].push_back(vertex);
             numvertices++;
         }
         
+        //update choice for the vertex based on their parent
         void updatechoice(Vertex &vertex) {
+            //choice value
             int newchoice = 3;
+
+            //get parent neighbors
             std::list<Vertex> parentneighbors = adjlist[getparentid(vertex.getid())];
             for(std::list<Vertex>::iterator neighbor = ++parentneighbors.begin(); neighbor != parentneighbors.end(); neighbor++) {
                 if(vertex.getid() == neighbor->getid()) {
@@ -68,21 +77,26 @@ class AdjList {
                 }
                 newchoice++;
             }
+            //set choice depending on if it equals the first or second edge (3 or 4)
             vertex.setchoice(newchoice);
         }
 
+        //get parentid
         int getparentid(int id) {
             return getvertexhead(id).getparent();
         }
 
+        //get vertex head but as reference so it will edit the passed vertex
         Vertex &getvertexhead(int id) {
             return adjlist[id].front();
         }
         
+        //get vertex status
         traversal vertexstatus(Vertex vertex) {
             return adjlist[vertex.getid()].front().status;
         }
 
+        //return true if vertex has neighbors
         bool hasneighbors(Vertex vertex) {
             if (adjlist[vertex.getid()].size() > 1)
                 return true;
@@ -90,22 +104,22 @@ class AdjList {
                 return false;
         }
 
+        //get neighbors
         std::list<Vertex> getneighbors(Vertex vertex) {
             std::list<Vertex> neighbors = adjlist.at(vertex.getid());
             //pop the leading vertex which represents the vertex
             neighbors.pop_front();
             return neighbors;
         }
-
-        void addedge(Vertex vertexA, Vertex vertexB, int newchoice) {
+        
+        //add edge 
+        void addedge(Vertex vertexA, Vertex vertexB) {
             if(vertexB.getid() != -1) {
-                adjlist[vertexA.getid()].front().setchoice(newchoice);
-                if(vertexB.getdirection().compare("J") == 0)
-                    adjlist[vertexB.getid()].front().setchoice(newchoice);
                 adjlist[vertexA.getid()].push_back(vertexB);
             }
         }
         
+        //display adjacency list - used for testing
         std::string display() {
             std::string graph;
             for(int i = 0; i<adjlist.size(); i++) {
