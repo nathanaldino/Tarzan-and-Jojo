@@ -111,27 +111,27 @@ int main() {
             //if northwest
             else if(maze[i][j].getdirection().compare("NW") == 0) {
                 if( (i-3)>=0 && (j-3)>=0 )
-                    graph.addedge(maze[i][j],maze[i-3][j+3],3);
+                    graph.addedge(maze[i][j],maze[i-3][j-3],3);
                 if( (i-4)>=0 && (j-4)>=0 )
-                    graph.addedge(maze[i][j],maze[i-4][j+4],4);
+                    graph.addedge(maze[i][j],maze[i-4][j-4],4);
             }
             //if southeast
             else if(maze[i][j].getdirection().compare("SE") == 0) {
                 if( (i+3)<rows && (j+3)<cols )
-                    graph.addedge(maze[i][j],maze[i-3][j+3],3);
+                    graph.addedge(maze[i][j],maze[i+3][j+3],3);
                 if( (i+4)<rows && (j+4)<cols )
-                    graph.addedge(maze[i][j],maze[i-4][j+4],4);
+                    graph.addedge(maze[i][j],maze[i+4][j+4],4);
             }
             //if southwest
             else if(maze[i][j].getdirection().compare("SW") == 0) {
                 if( (i+3)<rows && (j-3)>=0 )
-                    graph.addedge(maze[i][j],maze[i-3][j+3],3);
+                    graph.addedge(maze[i][j],maze[i+3][j-3],3);
                 if( (i+4)<rows && (j-4)>=0 )
-                    graph.addedge(maze[i][j],maze[i-4][j+4],4);
+                    graph.addedge(maze[i][j],maze[i+4][j-4],4);
             }
         }
     }
-    
+
     //TESTING PURPOSES
     string displaystring;
     if(true) {
