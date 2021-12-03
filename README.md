@@ -8,3 +8,7 @@ Input file must be named "input.txt"
 Output file will be named "output.txt"
 
 Finds the sequence of directions and number of spaces from Tarzan to Jojo 
+
+Please run with:
+g++ -std=c++11  *.cpp
+./a.out

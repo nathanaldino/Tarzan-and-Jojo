@@ -15,6 +15,7 @@ int main() {
     
     //intialize variables
     vector< vector<Vertex> > maze;  //DS to store input maze
+    vector<Vertex> mazeinside;      //Will be used to store sentinel value
     int rows, cols;                 //save row/col size
     int tarzanrow, tarzancol;       //save tarzan's coordinates
     Vertex tarzanstart, jojo;       //save the vertex of tarzan and jojo for easy lookup
@@ -30,12 +31,21 @@ int main() {
     //test
     cout << rows << cols << endl;
     cout << tarzanrow << tarzancol << endl;
-    
+
+    Vertex defaultvertex;
+    for(int i = 0; i<cols; i++) {
+        mazeinside.push_back(defaultvertex);
+    }
+    for(int i = 0; i<rows; i++) {
+        maze.push_back(mazeinside);
+    }
+
     //fill 2D array with Vertex's
     for(int i=0; i<rows; i++) {
         for(int j=0; j<cols; j++) {
             string temp;
             input >> temp;
+            cout << temp;
             Vertex newvertex;
             if (temp.compare("X") == 0) {
                 maze[i][j] = newvertex;
@@ -58,7 +68,9 @@ int main() {
         }
     }
     input.close();
-
+    
+    cout << "stop";
+    return 1;
     //rerun through 2D graph and populate adjlist graph Edges based on direction
     for(int i=0; i<rows; i++) {
         for(int j=0; j<cols; j++) {
@@ -155,6 +167,7 @@ int main() {
         output.close();
     }
 
+    return 1;
 }
 
 bool validdirection(Vertex vertex) {
