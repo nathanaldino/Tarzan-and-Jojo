@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<list>
 #include<vector>
-#include<iostream>
 
 enum traversal {undiscovered, discovered, explored};
 
@@ -60,6 +59,18 @@ class AdjList {
             numvertices++;
         }
         
+        void updatechoice(Vertex &vertex) {
+            int newchoice = 3;
+            std::list<Vertex> parentneighbors = adjlist[getparentid(vertex.getid())];
+            for(std::list<Vertex>::iterator neighbor = ++parentneighbors.begin(); neighbor != parentneighbors.end(); neighbor++) {
+                if(vertex.getid() == neighbor->getid()) {
+                    break;
+                }
+                newchoice++;
+            }
+            vertex.setchoice(newchoice);
+        }
+
         int getparentid(int id) {
             return getvertexhead(id).getparent();
         }

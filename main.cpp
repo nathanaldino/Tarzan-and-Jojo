@@ -7,7 +7,7 @@ using namespace std;
 //traversal algo using DFS
 void DFStarzan(Vertex tarzan, AdjList &graph);
 //prints the solution from jojo if found, otherwise returns an empty string
-string printSolution(Vertex jojo, string &solution, AdjList graph);
+string printSolution(Vertex jojo, string &solution, AdjList &graph);
 
 int main() {
     
@@ -181,9 +181,10 @@ void DFStarzan(Vertex tarzan, AdjList &graph) {
 
 }
 
-string printSolution(Vertex jojo, string &solution, AdjList graph) {
+string printSolution(Vertex jojo, string &solution, AdjList &graph) {
     if(graph.getparentid(jojo.getid()) != -1) {
         printSolution(graph.getvertexhead(graph.getparentid(jojo.getid())),solution,graph);
+        graph.updatechoice(graph.getvertexhead(jojo.getid()));
         solution += graph.getvertexhead(graph.getparentid(jojo.getid())).getdirection() + "-" + to_string(graph.getvertexhead(jojo.getid()).getchoice()) + " ";
     }
     else {
