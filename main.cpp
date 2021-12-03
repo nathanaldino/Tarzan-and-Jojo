@@ -32,6 +32,7 @@ int main() {
     cout << rows << cols << endl;
     cout << tarzanrow << tarzancol << endl;
 
+    //fill 2D vector with default values
     Vertex defaultvertex;
     for(int i = 0; i<cols; i++) {
         mazeinside.push_back(defaultvertex);
@@ -45,7 +46,6 @@ int main() {
         for(int j=0; j<cols; j++) {
             string temp;
             input >> temp;
-            cout << temp;
             Vertex newvertex;
             if (temp.compare("X") == 0) {
                 maze[i][j] = newvertex;
@@ -54,12 +54,12 @@ int main() {
                 //create vertex and set the direction of entry
                 newvertex = Vertex(numvertices++);
                 newvertex.setdirection(temp);
-                
+                cout << "vertex created for " << newvertex.getdirection() << endl;
                 //intialize adjlist graph's Vertices by creating upon finding a valid entry
                 graph.createVertex(newvertex);
 
                 //save to tarzan or jojo if found
-                if(i==tarzanrow && j==tarzancol)
+                if(i==tarzanrow-1 && j==tarzancol-1)
                     tarzanstart = newvertex;
                 else if(temp.compare("J") == 0)
                     jojo = newvertex;
@@ -69,12 +69,13 @@ int main() {
     }
     input.close();
     
-    cout << "stop";
-    return 1;
+    cout << maze.size() << mazeinside.size() << endl;
+    
     //rerun through 2D graph and populate adjlist graph Edges based on direction
     for(int i=0; i<rows; i++) {
         for(int j=0; j<cols; j++) {
             //if X
+            cout << "breh";
             if(maze[i][j].getid() == -1) 
                 continue;
             //if jojo, dont add edges since he is finishing point
@@ -83,64 +84,67 @@ int main() {
             }
             //if north, add edges. same case as ones below
             else if(maze[i][j].getdirection().compare("N") == 0) {
-                if(validdirection(maze[i-3][j]) && (i-3)<=0 )
+                if( (i-3)>=0 )
                     graph.addedge(maze[i][j],maze[i-3][j],3);
-                if(validdirection(maze[i-4][j]) && (i-4)<=0 )
+                if( (i-4)>=0 )
                     graph.addedge(maze[i][j],maze[i-4][j],4);
             }
             //if south
             else if(maze[i][j].getdirection().compare("S") == 0) {
-                if(validdirection(maze[i+3][j]) && (i+3)>=rows )
+                if( (i+3)<rows )
                     graph.addedge(maze[i][j],maze[i+3][j],3);
-                if(validdirection(maze[i+4][j]) && (i+3)>=rows )
+                if( (i+3)<rows )
                     graph.addedge(maze[i][j],maze[i+4][j],4);
             }
             //if east
             else if(maze[i][j].getdirection().compare("E") == 0) {
-                if(validdirection(maze[i][j+3]) && (j+3)>=cols)
+                if( (j+3)<cols)
                     graph.addedge(maze[i][j],maze[i][j+3],3);
-                if(validdirection(maze[i][j+4]) && (j+4)>=cols)
+                if( (j+4)<cols)
                     graph.addedge(maze[i][j],maze[i][j+4],4);
             }
             //if west
             else if(maze[i][j].getdirection().compare("W") == 0) {
-                if(validdirection(maze[i][j-3]) && (j-3)<=0)
+                if( (j-3)>=0)
                     graph.addedge(maze[i][j],maze[i][j-3],3);
-                if(validdirection(maze[i][j-4]) && (j-4)<=0)
+                if( (j-4)>=0)
                     graph.addedge(maze[i][j],maze[i][j-4],4);
             }
             //if northeast
             else if(maze[i][j].getdirection().compare("NE") == 0) {
-                if(validdirection(maze[i-3][j+3]) && (i-3)<=0 && (j+3)>=cols )
+                if( (i-3)>=0 && (j+3)<cols )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
-                if(validdirection(maze[i-4][j+4]) && (i-4)<=0 && (j+4)>=cols )
+                if( (i-4)>=0 && (j+4)<cols )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
             //if northwest
             else if(maze[i][j].getdirection().compare("NW") == 0) {
-                if(validdirection(maze[i-3][j-3]) && (i-3)<=0 && (j-3)<=0 )
+                if( (i-3)>=0 && (j-3)>=0 )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
-                if(validdirection(maze[i-4][j+4]) && (i-4)<=0 && (j-4)<=0 )
+                if( (i-4)>=0 && (j-4)>=0 )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
             //if southeast
             else if(maze[i][j].getdirection().compare("SE") == 0) {
-                if(validdirection(maze[i+3][j+3]) && (i+3)>=rows && (j+3)>=cols )
+                if( (i+3)<rows && (j+3)<cols )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
-                if(validdirection(maze[i+4][j+4]) && (i+4)>=rows && (j+4)>=cols )
+                if( (i+4)<rows && (j+4)<cols )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
             //if southwest
             else if(maze[i][j].getdirection().compare("SW") == 0) {
-                if(validdirection(maze[i+3][j-3]) && (i+3)>=rows && (j-3)<=0 )
+                if( (i+3)<rows && (j-3)>=0 )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
-                if(validdirection(maze[i+4][j+4]) && (i+4)>=rows && (j-4)<=0 )
+                if( (i+4)<rows && (j-4)>=0 )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
 
             
         }
     }
+
+    cout << "stop";
+    return 1;
 
     string displaystring;
     //TESTING PURPOSES
