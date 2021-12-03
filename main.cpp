@@ -134,16 +134,17 @@ int main() {
     
     //TESTING PURPOSES
     string displaystring;
-    if(false) {
+    if(true) {
         displaystring = graph.display();
         cout << displaystring;
     }
     
     //run algorithm
-    cout << tarzanstart.getid() << tarzanstart.getchoice();
-
+    cout << "start tarzan: " << tarzanstart.getid() << endl;
     DFStarzan(tarzanstart,graph);
-
+    cout << graph.getparentid(7);
+    cout << " dfs done" << endl;
+    return 1;
     //print correct path to output
     string solution;
     printSolution(jojo, solution);
@@ -163,23 +164,25 @@ int main() {
 
 void DFStarzan(Vertex tarzan, AdjList &graph) {
     graph.discover(tarzan);
-    cout << "breh";
-    list<Vertex> neighbors = graph.getneighbors(tarzan);
-    cout << "breh";
-    for(list<Vertex>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
-        cout << "breh";
-        if(graph.vertexstatus(*neighbor) == undiscovered) {
-            neighbor->setparent(tarzan);
-            DFStarzan(*neighbor,graph);
+
+    if(graph.hasneighbors(tarzan)) {
+        list<Vertex> neighbors = graph.getneighbors(tarzan);
+        for(list<Vertex>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
+            if(graph.vertexstatus(*neighbor) == undiscovered) {
+                cout << graph.getvertexhead(neighbor->getid()).getid() << endl;
+                graph.getvertexhead(neighbor->getid()).setparent(tarzan.getid());
+                DFStarzan(*neighbor,graph);
+            }
         }
     }
+
     graph.explore(tarzan);
 }
 
 string printSolution(Vertex jojo, string &solution) {
-    if(jojo.getparent() != nullptr) {
-            printSolution(*jojo.getparent(),solution);
-            solution += jojo.getparent()->getdirection() + "-" + to_string(jojo.getchoice());
+    if(jojo.getparent() != -1) {
+        printSolution(jojo.getparent(),solution);
+        //solution += jojo.getparent().getdirection() + "-" + to_string(jojo.getchoice());
     }
     else {
         return solution;

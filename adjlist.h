@@ -5,12 +5,13 @@
 #include<unordered_map>
 #include<list>
 #include<vector>
+#include<iostream>
 
 enum traversal {undiscovered, discovered, explored};
 
 class Vertex {
     private:
-        Vertex *parent = NULL;
+        int parentid = -1;
 
         int id = -1;
         int choice = -1;
@@ -27,8 +28,8 @@ class Vertex {
         int getid() {return id;}
         void setid(int newid) {id = newid;}
 
-        Vertex* getparent() {return parent;}
-        void setparent(Vertex newparent) {*parent = newparent;}
+        int getparent() {return parentid;}
+        void setparent(int newid) {parentid = newid;}
 
         int getchoice() {return choice;}
         void setchoice(int newchoice) {choice = newchoice;}
@@ -58,9 +59,24 @@ class AdjList {
             adjlist[vertex.getid()].push_back(vertex);
             numvertices++;
         }
+        
+        int getparentid(int id) {
+            return getvertexhead(id).getparent();
+        }
 
+        Vertex getvertexhead(int id) {
+            return adjlist[id].front();
+        }
+        
         traversal vertexstatus(Vertex vertex) {
             return adjlist[vertex.getid()].front().status;
+        }
+
+        bool hasneighbors(Vertex vertex) {
+            if (adjlist[vertex.getid()].size() > 1)
+                return true;
+            else
+                return false;
         }
 
         std::list<Vertex> getneighbors(Vertex vertex) {
