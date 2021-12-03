@@ -7,7 +7,7 @@ using namespace std;
 //traversal algo using DFS
 void DFStarzan(Vertex tarzan, AdjList &graph);
 //prints the solution from jojo if found, otherwise returns an empty string
-string printSolution(Vertex jojo, string &solution);
+string printSolution(Vertex jojo, string &solution, AdjList graph);
 
 int main() {
     
@@ -144,10 +144,10 @@ int main() {
     DFStarzan(tarzanstart,graph);
     cout << endl << graph.getparentid(7) <<graph.getvertexhead(7).getid() << graph.getvertexhead(7).status <<endl;
     cout << "dfs done" << endl;
-    return 1;
+
     //print correct path to output
     string solution;
-    printSolution(jojo, solution);
+    printSolution(jojo, solution, graph);
     
     fstream output;
     output.open("output.txt",ios_base::out);
@@ -181,10 +181,10 @@ void DFStarzan(Vertex tarzan, AdjList &graph) {
 
 }
 
-string printSolution(Vertex jojo, string &solution) {
-    if(jojo.getparent() != -1) {
-        printSolution(jojo.getparent(),solution);
-        //solution += jojo.getparent().getdirection() + "-" + to_string(jojo.getchoice());
+string printSolution(Vertex jojo, string &solution, AdjList graph) {
+    if(graph.getparentid(jojo.getid()) != -1) {
+        printSolution(graph.getvertexhead(graph.getparentid(jojo.getid())),solution,graph);
+        solution += graph.getvertexhead(graph.getparentid(jojo.getid())).getdirection() + "-" + to_string(graph.getvertexhead(jojo.getid()).getchoice()) + " ";
     }
     else {
         return solution;
