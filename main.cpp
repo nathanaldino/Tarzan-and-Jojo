@@ -70,12 +70,12 @@ int main() {
     input.close();
     
     cout << maze.size() << mazeinside.size() << endl;
-    
+
     //rerun through 2D graph and populate adjlist graph Edges based on direction
+    
     for(int i=0; i<rows; i++) {
         for(int j=0; j<cols; j++) {
             //if X
-            cout << "breh";
             if(maze[i][j].getid() == -1) 
                 continue;
             //if jojo, dont add edges since he is finishing point
@@ -93,7 +93,7 @@ int main() {
             else if(maze[i][j].getdirection().compare("S") == 0) {
                 if( (i+3)<rows )
                     graph.addedge(maze[i][j],maze[i+3][j],3);
-                if( (i+3)<rows )
+                if( (i+4)<rows )
                     graph.addedge(maze[i][j],maze[i+4][j],4);
             }
             //if east
@@ -138,13 +138,9 @@ int main() {
                 if( (i+4)<rows && (j-4)>=0 )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
-
-            
         }
     }
-
-    cout << "stop";
-    return 1;
+    
 
     string displaystring;
     //TESTING PURPOSES

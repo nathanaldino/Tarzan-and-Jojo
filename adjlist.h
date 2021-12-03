@@ -10,7 +10,7 @@ enum traversal {undiscovered, discovered, explored};
 
 class Vertex {
     private:
-        Vertex *parent = nullptr;
+        Vertex *parent = NULL;
 
         int id = -1;
         int choice = -1;
