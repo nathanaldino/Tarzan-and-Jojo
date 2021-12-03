@@ -16,9 +16,9 @@ class Vertex {
         int choice = -1;
         std::string direction = "X";
 
+    public:  
         traversal status = undiscovered;
         
-    public:  
         Vertex() {}
         Vertex(int newid) {
             setid(newid);
@@ -35,10 +35,6 @@ class Vertex {
 
         std::string getdirection() {return direction;}
         void setdirection(std::string newdirection) {direction = newdirection;}
-
-        traversal getstatus() {return status;}
-        void discover() {status = discovered;}
-        void explore() {status = explored;}  
 };
 
 class AdjList {
@@ -50,10 +46,21 @@ class AdjList {
         std::unordered_map<int, std::list<Vertex> > adjlist;
 
     public:
-        
+        void discover(Vertex vertex) {
+            adjlist[vertex.getid()].front().status = discovered;
+        }
+
+        void explore(Vertex vertex) {
+            adjlist[vertex.getid()].front().status = explored;
+        }
+
         void createVertex(Vertex vertex) {
             adjlist[vertex.getid()].push_back(vertex);
             numvertices++;
+        }
+
+        traversal vertexstatus(Vertex vertex) {
+            return adjlist[vertex.getid()].front().status;
         }
 
         std::list<Vertex> getneighbors(Vertex vertex) {
@@ -73,9 +80,13 @@ class AdjList {
         std::string display() {
             std::string graph;
             for(int i = 0; i<adjlist.size(); i++) {
-                for(std::list<Vertex>::iterator vertex = adjlist[i].begin(); vertex != adjlist[i].end(); vertex++)
+                for(std::list<Vertex>::iterator vertex = adjlist[i].begin(); vertex != adjlist[i].end(); vertex++) {
+                    if(vertex->getdirection().compare("J") == 0) {
+                        graph += "V" + std::to_string(vertex->getid()) + "J ";
+                        continue;
+                    }
                     graph += "V" + std::to_string(vertex->getid()) + " ";
-                
+                }
                 graph += "\n";
             }
             graph += "\n";

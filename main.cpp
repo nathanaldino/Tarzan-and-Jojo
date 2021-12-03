@@ -17,7 +17,7 @@ int main() {
     int rows, cols;                 //save row/col size
     int tarzanrow, tarzancol;       //save tarzan's coordinates
     Vertex tarzanstart, jojo;       //save the vertex of tarzan and jojo for easy lookup
-    int numvertices = 1;            //number of vertices in graph
+    int numvertices = 0;            //number of vertices in graph
     AdjList graph;                  //create graph
 
     //readfile
@@ -134,13 +134,14 @@ int main() {
     
     //TESTING PURPOSES
     string displaystring;
-    if(true) {
+    if(false) {
         displaystring = graph.display();
         cout << displaystring;
     }
     
-
     //run algorithm
+    cout << tarzanstart.getid() << tarzanstart.getchoice();
+
     DFStarzan(tarzanstart,graph);
 
     //print correct path to output
@@ -161,15 +162,18 @@ int main() {
 }
 
 void DFStarzan(Vertex tarzan, AdjList &graph) {
-    tarzan.discover();
+    graph.discover(tarzan);
+    cout << "breh";
     list<Vertex> neighbors = graph.getneighbors(tarzan);
+    cout << "breh";
     for(list<Vertex>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
-        if(neighbor->getstatus() == undiscovered) {
+        cout << "breh";
+        if(graph.vertexstatus(*neighbor) == undiscovered) {
             neighbor->setparent(tarzan);
             DFStarzan(*neighbor,graph);
         }
     }
-    tarzan.explore();
+    graph.explore(tarzan);
 }
 
 string printSolution(Vertex jojo, string &solution) {
