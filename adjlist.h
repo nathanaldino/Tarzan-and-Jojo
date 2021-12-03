@@ -64,8 +64,10 @@ class AdjList {
         }
 
         void addedge(Vertex vertexA, Vertex vertexB, int newchoice) {
-            vertexB.setchoice(newchoice);
-            adjlist[vertexA.getid()].push_back(vertexB);
+            if(vertexB.getid() != -1) {
+                vertexB.setchoice(newchoice);
+                adjlist[vertexA.getid()].push_back(vertexB);
+            }
         }
         
         std::string display() {
@@ -76,6 +78,7 @@ class AdjList {
                 
                 graph += "\n";
             }
+            graph += "\n";
             return graph;
         }
 };

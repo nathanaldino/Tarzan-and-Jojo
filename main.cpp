@@ -4,8 +4,6 @@
 
 using namespace std;
 
-//helper function on checking if neighbor has a direction
-bool validdirection(Vertex vertex);
 //traversal algo using DFS
 void DFStarzan(Vertex tarzan, AdjList &graph);
 //prints the solution from jojo if found, otherwise returns an empty string
@@ -28,10 +26,6 @@ int main() {
     input >> rows >> cols;
     input >> tarzanrow >> tarzancol;
     
-    //test
-    cout << rows << cols << endl;
-    cout << tarzanrow << tarzancol << endl;
-
     //fill 2D vector with default values
     Vertex defaultvertex;
     for(int i = 0; i<cols; i++) {
@@ -54,7 +48,6 @@ int main() {
                 //create vertex and set the direction of entry
                 newvertex = Vertex(numvertices++);
                 newvertex.setdirection(temp);
-                cout << "vertex created for " << newvertex.getdirection() << endl;
                 //intialize adjlist graph's Vertices by creating upon finding a valid entry
                 graph.createVertex(newvertex);
 
@@ -68,8 +61,6 @@ int main() {
         }
     }
     input.close();
-    
-    cout << maze.size() << mazeinside.size() << endl;
 
     //rerun through 2D graph and populate adjlist graph Edges based on direction
     
@@ -141,40 +132,32 @@ int main() {
         }
     }
     
-
-    string displaystring;
     //TESTING PURPOSES
+    string displaystring;
     if(true) {
         displaystring = graph.display();
         cout << displaystring;
     }
-    else {
-        //run algorithm
-        DFStarzan(tarzanstart,graph);
+    
 
-        //print correct path to output
-        string solution;
-        printSolution(jojo, solution);
-        
-        fstream output;
-        output.open("output.txt",ios_base::out);
-        if(solution.empty()) {
-            output << "There is no way to reach Jojo!!!" << endl;
-        }
-        else {
-            output << solution << endl;
-        }
-        output.close();
+    //run algorithm
+    DFStarzan(tarzanstart,graph);
+
+    //print correct path to output
+    string solution;
+    printSolution(jojo, solution);
+    
+    fstream output;
+    output.open("output.txt",ios_base::out);
+    if(solution.empty()) {
+        output << "There is no way to reach Jojo!!!" << endl;
     }
+    else {
+        output << solution << endl;
+    }
+    output.close();
 
     return 1;
-}
-
-bool validdirection(Vertex vertex) {
-    if(vertex.getdirection().compare("X") == 0)
-        return false;
-    else
-        return true;
 }
 
 void DFStarzan(Vertex tarzan, AdjList &graph) {
