@@ -142,8 +142,8 @@ int main() {
     //run algorithm
     cout << "start tarzan: " << tarzanstart.getid() << endl;
     DFStarzan(tarzanstart,graph);
-    cout << graph.getparentid(7);
-    cout << " dfs done" << endl;
+    cout << endl << graph.getparentid(7) <<graph.getvertexhead(7).getid() << graph.getvertexhead(7).status <<endl;
+    cout << "dfs done" << endl;
     return 1;
     //print correct path to output
     string solution;
@@ -164,19 +164,21 @@ int main() {
 
 void DFStarzan(Vertex tarzan, AdjList &graph) {
     graph.discover(tarzan);
-
+    
     if(graph.hasneighbors(tarzan)) {
         list<Vertex> neighbors = graph.getneighbors(tarzan);
         for(list<Vertex>::iterator neighbor = neighbors.begin(); neighbor != neighbors.end(); neighbor++) {
             if(graph.vertexstatus(*neighbor) == undiscovered) {
-                cout << graph.getvertexhead(neighbor->getid()).getid() << endl;
+                //cout << graph.getvertexhead(neighbor->getid()).getid() << "-" << graph.getvertexhead(neighbor->getid()).status <<endl;
                 graph.getvertexhead(neighbor->getid()).setparent(tarzan.getid());
+                cout << neighbor->getid() << " parent is " << graph.getvertexhead(neighbor->getid()).getparent() << endl;
                 DFStarzan(*neighbor,graph);
             }
         }
     }
-
+    //cout << graph.getvertexhead(tarzan.getid()).getid() << "-" <<graph.getvertexhead(tarzan.getid()).status <<endl;
     graph.explore(tarzan);
+
 }
 
 string printSolution(Vertex jojo, string &solution) {

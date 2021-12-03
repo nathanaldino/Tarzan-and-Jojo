@@ -64,7 +64,7 @@ class AdjList {
             return getvertexhead(id).getparent();
         }
 
-        Vertex getvertexhead(int id) {
+        Vertex &getvertexhead(int id) {
             return adjlist[id].front();
         }
         
