@@ -43,16 +43,24 @@ class Vertex {
 
 class AdjList {
     private:
-        int numvertices;
+        int numvertices = 0;
+        
+        //an int will be stored for easy lookup, the list will contain the Vertex
+        //subsequent vertices represent the adjacent vertices
         std::unordered_map<int, std::list<Vertex> > adjlist;
 
     public:
-        AdjList(int vertices) {
-            numvertices = vertices;
-        }
         
+        void createVertex(Vertex vertex) {
+            adjlist[vertex.getid()].push_back(vertex);
+            numvertices++;
+        }
+
         std::list<Vertex> getneighbors(Vertex vertex) {
-            return adjlist.at(vertex.getid());
+            std::list<Vertex> neighbors = adjlist.at(vertex.getid());
+            //pop the leading vertex which represents the vertex
+            neighbors.pop_front();
+            return neighbors;
         }
 
         void addedge(Vertex vertexA, Vertex vertexB, int newchoice) {
@@ -60,8 +68,16 @@ class AdjList {
             adjlist[vertexA.getid()].push_back(vertexB);
         }
         
-
-        
+        std::string display() {
+            std::string graph;
+            for(int i = 0; i<adjlist.size(); i++) {
+                for(std::list<Vertex>::iterator vertex = adjlist[i].begin(); vertex != adjlist[i].end(); vertex++)
+                    graph += "V" + std::to_string(vertex->getid()) + " ";
+                
+                graph += "\n";
+            }
+            return graph;
+        }
 };
 
 #endif

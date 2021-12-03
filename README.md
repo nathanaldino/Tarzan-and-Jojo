@@ -1,3 +1,10 @@
 # Tarzan-and-Jojo
-Project 3
+Analysis of Algorithms Project 3
+Nathaniel Aldino
+
 This project will output the solution to a formatted Tarzan and Jojo Maze
+
+Input file must be named "input.txt"
+Output file will be named "output.txt"
+
+Finds the sequence of directions and number of spaces from Tarzan to Jojo 

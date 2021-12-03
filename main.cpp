@@ -1,4 +1,4 @@
-#include<adjlist.h>
+#include"adjlist.h"
 #include<iostream>
 #include<fstream>
 
@@ -6,17 +6,20 @@ using namespace std;
 
 //helper function on checking if neighbor has a direction
 bool validdirection(Vertex vertex);
+//traversal algo using DFS
 void DFStarzan(Vertex tarzan, AdjList &graph);
+//prints the solution from jojo if found, otherwise returns an empty string
 string printSolution(Vertex jojo, string &solution);
 
 int main() {
     
     //intialize variables
-    vector< vector<Vertex> > maze;
-    int rows, cols;
-    int tarzanrow, tarzancol;
-    Vertex tarzanstart, jojo;
-    int numvertices = 1;
+    vector< vector<Vertex> > maze;  //DS to store input maze
+    int rows, cols;                 //save row/col size
+    int tarzanrow, tarzancol;       //save tarzan's coordinates
+    Vertex tarzanstart, jojo;       //save the vertex of tarzan and jojo for easy lookup
+    int numvertices = 1;            //number of vertices in graph
+    AdjList graph;                  //create graph
 
     //readfile
     fstream input;
@@ -38,8 +41,14 @@ int main() {
                 maze[i][j] = newvertex;
             }
             else {
+                //create vertex and set the direction of entry
                 newvertex = Vertex(numvertices++);
                 newvertex.setdirection(temp);
+                
+                //intialize adjlist graph's Vertices by creating upon finding a valid entry
+                graph.createVertex(newvertex);
+
+                //save to tarzan or jojo if found
                 if(i==tarzanrow && j==tarzancol)
                     tarzanstart = newvertex;
                 else if(temp.compare("J") == 0)
@@ -50,59 +59,66 @@ int main() {
     }
     input.close();
 
-    //create graph
-    AdjList graph(numvertices);
-
-    //rerun through 2D graph and populate adjlist graph based on direction
+    //rerun through 2D graph and populate adjlist graph Edges based on direction
     for(int i=0; i<rows; i++) {
         for(int j=0; j<cols; j++) {
+            //if X
             if(maze[i][j].getid() == -1) 
                 continue;
+            //if jojo, dont add edges since he is finishing point
             else if(maze[i][j].getdirection().compare("J") == 0) {
                 continue;
             }
+            //if north, add edges. same case as ones below
             else if(maze[i][j].getdirection().compare("N") == 0) {
                 if(validdirection(maze[i-3][j]) && (i-3)<=0 )
                     graph.addedge(maze[i][j],maze[i-3][j],3);
                 if(validdirection(maze[i-4][j]) && (i-4)<=0 )
                     graph.addedge(maze[i][j],maze[i-4][j],4);
             }
+            //if south
             else if(maze[i][j].getdirection().compare("S") == 0) {
                 if(validdirection(maze[i+3][j]) && (i+3)>=rows )
                     graph.addedge(maze[i][j],maze[i+3][j],3);
                 if(validdirection(maze[i+4][j]) && (i+3)>=rows )
                     graph.addedge(maze[i][j],maze[i+4][j],4);
             }
+            //if east
             else if(maze[i][j].getdirection().compare("E") == 0) {
                 if(validdirection(maze[i][j+3]) && (j+3)>=cols)
                     graph.addedge(maze[i][j],maze[i][j+3],3);
                 if(validdirection(maze[i][j+4]) && (j+4)>=cols)
                     graph.addedge(maze[i][j],maze[i][j+4],4);
             }
+            //if west
             else if(maze[i][j].getdirection().compare("W") == 0) {
                 if(validdirection(maze[i][j-3]) && (j-3)<=0)
                     graph.addedge(maze[i][j],maze[i][j-3],3);
                 if(validdirection(maze[i][j-4]) && (j-4)<=0)
                     graph.addedge(maze[i][j],maze[i][j-4],4);
             }
+            //if northeast
             else if(maze[i][j].getdirection().compare("NE") == 0) {
                 if(validdirection(maze[i-3][j+3]) && (i-3)<=0 && (j+3)>=cols )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
                 if(validdirection(maze[i-4][j+4]) && (i-4)<=0 && (j+4)>=cols )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
+            //if northwest
             else if(maze[i][j].getdirection().compare("NW") == 0) {
                 if(validdirection(maze[i-3][j-3]) && (i-3)<=0 && (j-3)<=0 )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
                 if(validdirection(maze[i-4][j+4]) && (i-4)<=0 && (j-4)<=0 )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
+            //if southeast
             else if(maze[i][j].getdirection().compare("SE") == 0) {
                 if(validdirection(maze[i+3][j+3]) && (i+3)>=rows && (j+3)>=cols )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
                 if(validdirection(maze[i+4][j+4]) && (i+4)>=rows && (j+4)>=cols )
                     graph.addedge(maze[i][j],maze[i-4][j+4],4);
             }
+            //if southwest
             else if(maze[i][j].getdirection().compare("SW") == 0) {
                 if(validdirection(maze[i+3][j-3]) && (i+3)>=rows && (j-3)<=0 )
                     graph.addedge(maze[i][j],maze[i-3][j+3],3);
@@ -114,22 +130,30 @@ int main() {
         }
     }
 
-    //run algorithm
-    DFStarzan(tarzanstart,graph);
-
-    //print correct path to output
-    string solution;
-    printSolution(jojo, solution);
-    
-    fstream output;
-    output.open("output.txt",ios_base::out);
-    if(solution.empty()) {
-        output << "There is no way to reach Jojo!!!" << endl;
+    string displaystring;
+    //TESTING PURPOSES
+    if(true) {
+        displaystring = graph.display();
+        cout << displaystring;
     }
     else {
-        output << solution << endl;
+        //run algorithm
+        DFStarzan(tarzanstart,graph);
+
+        //print correct path to output
+        string solution;
+        printSolution(jojo, solution);
+        
+        fstream output;
+        output.open("output.txt",ios_base::out);
+        if(solution.empty()) {
+            output << "There is no way to reach Jojo!!!" << endl;
+        }
+        else {
+            output << solution << endl;
+        }
+        output.close();
     }
-    output.close();
 
 }
 
@@ -160,5 +184,7 @@ string printSolution(Vertex jojo, string &solution) {
     else {
         return solution;
     }
-
+    
+    //for unexpected errors
+    return solution;
 }
